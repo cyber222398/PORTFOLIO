@@ -1,15 +1,4 @@
 ﻿{
-  "version": 2,
-  "installCommand": "npm install",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/client",
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/.*",
-      "dest": "/index.html"
-    }
-  ]
+  "outputDirectory": "dist/client"
 }
