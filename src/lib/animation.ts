@@ -11,6 +11,25 @@ export function prefersReducedMotion() {
   );
 }
 
+let activeLenis: Lenis | null = null;
+let scrollLocked = false;
+
+/**
+ * Freezes the page while an overlay owns the screen. Toggles a class for the
+ * native path and pauses Lenis when it is running.
+ *
+ * The lock can be requested before Lenis exists — child effects run before the
+ * parent's — so the state is remembered and applied when the instance is made.
+ */
+export function setScrollLocked(locked: boolean) {
+  scrollLocked = locked;
+  if (typeof document === "undefined") return;
+
+  document.documentElement.classList.toggle("is-scroll-locked", locked);
+  if (locked) activeLenis?.stop();
+  else activeLenis?.start();
+}
+
 /**
  * Drives the page with Lenis and hands scroll control to ScrollTrigger so both
  * read the same position. Mount once, at the app root.
@@ -29,6 +48,9 @@ export function useSmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       touchMultiplier: 1.6,
     });
+
+    activeLenis = lenis;
+    if (scrollLocked) lenis.stop();
 
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -59,6 +81,7 @@ export function useSmoothScroll() {
       document.removeEventListener("click", onClick);
       gsap.ticker.remove(raf);
       lenis.destroy();
+      activeLenis = null;
     };
   }, []);
 }

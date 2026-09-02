@@ -53,16 +53,17 @@ export function Work() {
       scrollTrigger: { trigger: el, start: "top 70%", once: true },
     });
 
-    // Plates drift slower than the text beside them.
-    el.querySelectorAll<HTMLElement>(".project-visual").forEach((visual) => {
+    // Plates drift slower than the text beside them. Photographs are shown whole
+    // rather than cropped, so they stay put — sliding them would reveal the box.
+    el.querySelectorAll<HTMLElement>(".plate-inner").forEach((plate) => {
       gsap.fromTo(
-        visual.querySelector(".plate-inner"),
+        plate,
         { yPercent: -9 },
         {
           yPercent: 9,
           ease: "none",
           scrollTrigger: {
-            trigger: visual,
+            trigger: plate.closest(".project-visual"),
             start: "top bottom",
             end: "bottom top",
             scrub: true,
@@ -103,10 +104,22 @@ export function Work() {
       <div className="project-list">
         {projects.map((project, i) => (
           <article className="project-row" key={project.index}>
-            <div className="project-visual">
-              <div className="plate-inner">
-                <Plate seed={i + 1} />
-              </div>
+            <div className={`project-visual${project.image ? " project-visual-photo" : ""}`}>
+              {project.image ? (
+                <img
+                  className="project-photo"
+                  src={project.image}
+                  alt={project.alt}
+                  width={project.width}
+                  height={project.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div className="plate-inner">
+                  <Plate seed={i + 1} />
+                </div>
+              )}
               <span className="project-index-big">{project.index}</span>
             </div>
 
@@ -127,6 +140,22 @@ export function Work() {
                 </div>
               </dl>
               <p className="project-copy">{project.description}</p>
+
+              {project.link && (
+                <a
+                  className="project-link"
+                  href={project.link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <span className="project-link-label">
+                    {project.link.label}
+                    <span aria-hidden="true">↗</span>
+                  </span>
+                  <span className="project-link-note">{project.link.note}</span>
+                </a>
+              )}
+
               <ul className="project-stack">
                 {project.stack.map((tool) => (
                   <li key={tool}>{tool}</li>

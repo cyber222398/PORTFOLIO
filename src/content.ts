@@ -47,7 +47,25 @@ export const credentials = [
   },
 ];
 
-export const projects = [
+/** A project entry. Photographs and the annex link are optional. */
+type Project = {
+  index: string;
+  name: string;
+  year: string;
+  role: string;
+  context: string;
+  description: string;
+  stack: string[];
+  /** Documentation photograph. Falls back to a generated schematic when absent. */
+  image?: string;
+  alt?: string;
+  /** Natural pixel size, so the frame reserves the right space before loading. */
+  width?: number;
+  height?: number;
+  link?: { href: string; label: string; note: string };
+};
+
+export const projects: Project[] = [
   {
     index: "01",
     name: "Mini CNC",
@@ -57,6 +75,10 @@ export const projects = [
     description:
       "A working mini CNC prototype, built end to end. I wrote the Arduino firmware driving the axis motion, did the electrical wiring and mechanical assembly, then ran the functional tests. Driven through Process 3, a Java-based control interface.",
     stack: ["Arduino", "C/C++", "Process 3", "Mechanical assembly"],
+    image: "/project-mini-cnc.webp",
+    width: 1400,
+    height: 1508,
+    alt: "Control architecture of the mini CNC: an Arduino Uno driving a CNC shield with A4988 drivers, stepper motors on the X and Y axes and an SG90 servo on Z.",
   },
   {
     index: "02",
@@ -67,6 +89,15 @@ export const projects = [
     description:
       "I studied the mine's extraction machine and proposed integrating a measurement centre to monitor it. Alongside the study I joined the electrical maintenance crew on live industrial installations, troubleshooting equipment with the engineers and technicians on site.",
     stack: ["Electrical machines", "Instrumentation", "Industrial maintenance"],
+    image: "/project-extraction.webp",
+    width: 1500,
+    height: 833,
+    alt: "Slide from the study covering the extraction machine's command and monitoring system, with photographs of the operator control desk.",
+    link: {
+      href: "https://annex-roan.vercel.app/",
+      label: "Open the annex",
+      note: "Photographs and the full report",
+    },
   },
   {
     index: "03",

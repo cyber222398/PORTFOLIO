@@ -39,8 +39,10 @@ dist-ssr
 # Local scratch: verification screenshots, design references, unoptimised
 # duplicates of assets that ship as .webp. Kept on disk, out of the repo.
 .playwright-mcp/
+.intro-check/
 shot-*.png
 sweep-*.png
 footer-desktop.png
 mood.jpg
 public/footer-portrait.png
+project pic/

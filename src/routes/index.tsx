@@ -1,6 +1,7 @@
 import { createFileRoute, HeadContent } from "@tanstack/react-router";
 import "../styles.css";
 import { useSmoothScroll } from "../lib/animation";
+import { Intro } from "../components/Intro";
 import { SiteNav } from "../components/SiteNav";
 import { Hero } from "../components/Hero";
 import { Profile } from "../components/Profile";
@@ -35,6 +36,7 @@ function Home() {
   return (
     <>
       <HeadContent />
+      <Intro />
       <a className="skip-link" href="#profile">
         Skip to content
       </a>

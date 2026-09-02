@@ -49,7 +49,7 @@ export function Hero() {
         </div>
 
         <h1 className="hero-title">
-          <span className="title-line title-engineer">Engineer</span>
+          <span className="title-line title-student">Student</span>
           <span className="title-line title-developer">Developer</span>
         </h1>
 

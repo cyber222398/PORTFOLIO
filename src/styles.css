@@ -37,6 +37,21 @@ html.lenis, html.lenis body { height: auto; }
 
 ::selection { background: var(--accent); color: #fff; }
 
+/* Held while a full-screen overlay owns the view. */
+html.is-scroll-locked, html.is-scroll-locked body { overflow: hidden; }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
@@ -233,7 +248,7 @@ html.lenis, html.lenis body { height: auto; }
   will-change: transform, opacity;
 }
 .title-line { display: block; white-space: nowrap; }
-.title-engineer { color: var(--paper); }
+.title-student { color: var(--paper); }
 .title-developer { margin-left: 5.5vw; color: var(--accent); }
 
 .hero-connector {
@@ -511,15 +526,39 @@ html.lenis, html.lenis body { height: auto; }
 }
 .plate-inner { position: absolute; inset: -12% 0; }
 .plate { width: 100%; height: 100%; }
+
+/* A documentation photograph keeps its own proportions — the frame takes the
+   shape of the picture rather than cropping it to fit. */
+.project-visual-photo { aspect-ratio: auto; }
+.project-photo {
+  width: 100%;
+  height: auto;
+  /* Settled into the page; brought back up on hover. */
+  filter: saturate(0.88) contrast(1.03) brightness(0.84);
+  transition: filter 0.45s ease;
+}
+.project-visual-photo:hover .project-photo {
+  filter: saturate(1) contrast(1.03) brightness(1);
+}
+/* Keeps the oversized index readable over a bright photograph. */
+.project-visual::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  pointer-events: none;
+  background: linear-gradient(transparent, rgba(8, 8, 8, 0.78));
+}
 .project-index-big {
   position: absolute;
+  z-index: 1;
   left: 14px;
   bottom: 6px;
   font-size: clamp(44px, 6vw, 92px);
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.06em;
-  color: rgba(245, 242, 237, 0.14);
+  color: rgba(245, 242, 237, 0.2);
 }
 
 .project-name {
@@ -555,6 +594,31 @@ html.lenis, html.lenis body { height: auto; }
   line-height: 1.6;
   color: #cdc8c1;
 }
+.project-link {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: clamp(22px, 2.6vw, 32px);
+  padding: 15px 22px;
+  border: 1px solid var(--line);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+.project-link:hover { border-color: var(--accent); background-color: rgba(255, 88, 22, 0.06); }
+.project-link-label {
+  display: flex;
+  gap: 14px;
+  font-size: clamp(13px, 1vw, 15px);
+  font-weight: 600;
+}
+.project-link-label span { color: var(--accent); transition: transform 0.3s ease; }
+.project-link:hover .project-link-label span { transform: translate(3px, -3px); }
+.project-link-note {
+  font: 400 9px/1 var(--mono);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
 .project-stack {
   display: flex;
   flex-wrap: wrap;
@@ -762,6 +826,253 @@ html.lenis, html.lenis body { height: auto; }
   color: var(--muted);
 }
 
+/* ----------------------------------------------------------------- intro */
+/* Opening curtain. The whole sequence is CSS with `forwards` fill so it
+   completes even if the script never runs; React only unmounts it after. */
+.intro {
+  --fly: 1;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--ink);
+  animation: intro-curtain 0.72s cubic-bezier(0.76, 0, 0.24, 1) 1.92s forwards;
+}
+/* Skipping replaces the timed exit with an immediate one. */
+.intro--skip {
+  animation: none;
+  transform: translateY(-100%);
+  transition: transform 0.46s cubic-bezier(0.76, 0, 0.24, 1);
+  pointer-events: none;
+}
+
+.intro-glow {
+  position: absolute;
+  width: min(46rem, 130vw);
+  aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(255, 88, 22, 0.17), transparent 62%);
+  animation: intro-breathe 5s ease-in-out infinite alternate;
+}
+/* Reuses the same grain the hero uses, so both scenes share one texture. */
+.intro-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.16;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+.intro-dust::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  top: 62%;
+  width: 2px;
+  height: 2px;
+  box-shadow: 3rem 4rem 1px rgba(255, 88, 22, 0.55), 9rem 12rem 1px rgba(255, 88, 22, 0.32),
+    18rem 7rem 1px rgba(255, 138, 92, 0.6), 25rem 14rem 1px rgba(255, 88, 22, 0.4),
+    32rem 2rem 1px rgba(255, 88, 22, 0.5);
+  animation: intro-drift 14s linear infinite;
+}
+.intro::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 42%, var(--ink) 100%);
+}
+
+.intro-marks { position: absolute; inset: 0; }
+.intro-mark {
+  position: absolute;
+  opacity: 0;
+  animation: intro-blink 2.6s ease-out 0.9s infinite;
+}
+.intro-mark-spark { width: 12px; height: 12px; }
+.intro-mark-spark::before, .intro-mark-spark::after {
+  content: "";
+  position: absolute;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+.intro-mark-spark::before { inset: 5px 0 auto 0; height: 2px; }
+.intro-mark-spark::after { inset: 0 auto 0 5px; width: 2px; }
+.intro-mark-scratch {
+  width: 20px;
+  height: 0;
+  border-top: 2px solid var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  transform: rotate(-35deg);
+}
+.intro-mark-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.intro-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--gutter);
+  animation: intro-stage-out 0.42s cubic-bezier(0.4, 0, 1, 1) 1.5s forwards;
+}
+.intro-eyebrow, .intro-caption {
+  font: 400 10px/1 var(--mono);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  text-indent: 0.42em;
+  color: var(--accent);
+}
+.intro-eyebrow {
+  margin-bottom: 22px;
+  animation: intro-fade 0.6s ease 0.1s both;
+}
+.intro-caption {
+  margin-top: 26px;
+  color: var(--muted-soft);
+  animation: intro-fade 0.6s ease 0.95s both;
+}
+.intro-dots i {
+  display: inline-block;
+  width: 0.42em;
+  font-style: normal;
+  opacity: 0;
+  animation: intro-dot 1.2s steps(1) infinite;
+}
+.intro-dots i:nth-child(2) { animation-delay: 0.3s; }
+.intro-dots i:nth-child(3) { animation-delay: 0.6s; }
+
+.intro-rule {
+  display: block;
+  width: min(30rem, 68vw);
+  height: 1px;
+  overflow: hidden;
+}
+.intro-rule i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  box-shadow: 0 0 8px rgba(255, 88, 22, 0.65);
+  transform: scaleX(0);
+  animation: intro-draw 0.8s cubic-bezier(0.76, 0, 0.24, 1) 0.12s both;
+}
+.intro-rule-bottom i { animation-delay: 0.5s; }
+
+.intro-name, .intro-surname {
+  display: flex;
+  justify-content: center;
+  text-transform: uppercase;
+  line-height: 0.9;
+  white-space: nowrap;
+}
+.intro-name {
+  margin: 4vh 0 0;
+  font-size: clamp(3.4rem, 13vw, 9rem);
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--accent);
+}
+/* Outlined glyphs read as neon; the solid colour above is the fallback. */
+@supports (-webkit-text-stroke: 1px red) {
+  .intro-name .intro-letter {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--accent);
+  }
+}
+.intro-name .intro-letter:first-child, .intro-name .intro-letter:last-child {
+  font-size: 1.22em;
+}
+.intro-surname {
+  margin: 0 0 4vh;
+  /* Trailing letter-spacing sits after the last glyph; pad the other side back. */
+  padding-left: 0.44em;
+  font-size: clamp(1rem, 3.4vw, 2.3rem);
+  font-weight: 500;
+  letter-spacing: 0.44em;
+  color: var(--paper);
+}
+
+.intro-letter {
+  position: relative;
+  display: inline-block;
+  opacity: 0;
+  animation: intro-letter-in 0.92s cubic-bezier(0.2, 0.8, 0.2, 1) var(--d) both,
+    intro-flicker 0.9s linear 1s 1;
+  will-change: transform, opacity, filter;
+}
+/* Kept tight: text-shadow paints through the transparent fill, so a wide blur
+   would flood the counters and lose the outline. */
+.intro-name .intro-letter {
+  text-shadow: 0 0 5px rgba(255, 88, 22, 0.5), 0 0 20px rgba(255, 88, 22, 0.22);
+}
+.intro-surname .intro-letter {
+  text-shadow: 0 0 18px rgba(245, 242, 237, 0.35);
+}
+/* Two offset ghosts behind each glyph — the sketched, hand-traced edge. */
+.intro-name .intro-letter::before, .intro-name .intro-letter::after {
+  content: attr(data-char);
+  position: absolute;
+  inset: 0;
+  color: transparent;
+}
+.intro-name .intro-letter::before {
+  z-index: -1;
+  -webkit-text-stroke: 1px rgba(255, 88, 22, 0.55);
+  animation: intro-jitter 0.2s steps(2) infinite alternate;
+}
+.intro-name .intro-letter::after {
+  z-index: -2;
+  -webkit-text-stroke: 1px rgba(255, 138, 92, 0.32);
+  animation: intro-jitter-b 0.24s steps(2) infinite alternate;
+}
+
+@keyframes intro-letter-in {
+  from {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translate(calc(var(--x) * var(--fly)), calc(var(--y) * var(--fly)))
+      rotate(var(--r)) scale(1.5);
+  }
+  to { opacity: 1; filter: blur(0); transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+@keyframes intro-flicker {
+  0%, 46%, 62%, 100% { opacity: 1; }
+  52% { opacity: 0.4; }
+  70% { opacity: 0.62; }
+}
+@keyframes intro-jitter {
+  from { transform: translate(2px, -2px) rotate(-1.5deg); }
+  to { transform: translate(3px, -1px) rotate(-1deg); }
+}
+@keyframes intro-jitter-b {
+  from { transform: translate(-2px, 1px) rotate(1.5deg); }
+  to { transform: translate(-3px, 2px) rotate(1deg); }
+}
+@keyframes intro-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes intro-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes intro-dot { 0%, 74% { opacity: 1; } 75%, 100% { opacity: 0; } }
+@keyframes intro-breathe {
+  from { transform: scale(1); opacity: 0.75; }
+  to { transform: scale(1.12); opacity: 1; }
+}
+@keyframes intro-drift { to { transform: translate(5rem, -12rem); } }
+@keyframes intro-blink {
+  0%, 12%, 100% { opacity: 0; transform: scale(0.5); }
+  6% { opacity: 1; transform: scale(1.15); }
+}
+@keyframes intro-stage-out {
+  to { opacity: 0; filter: blur(7px); transform: scale(1.06); }
+}
+@keyframes intro-curtain {
+  to { transform: translateY(-100%); pointer-events: none; }
+}
+
 /* ----------------------------------------------------------- responsive */
 @media (max-width: 1040px) {
   .profile-grid { grid-template-columns: 1fr; }
@@ -777,6 +1088,22 @@ html.lenis, html.lenis body { height: auto; }
 
 @media (max-width: 760px) {
   :root { --gutter: 20px; }
+
+  /* Shorter fly-in distance, or the letters start well outside a phone screen. */
+  .intro { --fly: 0.42; }
+  .intro-dust { display: none; }
+  .intro-glow { width: min(26rem, 118vw); }
+  .intro-eyebrow { margin-bottom: 16px; font-size: 9px; letter-spacing: 0.34em; text-indent: 0.34em; }
+  .intro-caption { margin-top: 18px; font-size: 9px; letter-spacing: 0.34em; text-indent: 0.34em; }
+  .intro-rule { width: min(20rem, 74vw); }
+  .intro-name { margin-top: 3vh; font-size: clamp(2.9rem, 17vw, 4.6rem); }
+  .intro-surname {
+    margin-bottom: 3vh;
+    padding-left: 0.3em;
+    font-size: clamp(0.82rem, 4.3vw, 1.3rem);
+    letter-spacing: 0.3em;
+  }
+  .intro-name .intro-letter::before, .intro-name .intro-letter::after { display: none; }
 
   .site-nav { height: 62px; grid-template-columns: 1fr auto; }
   .nav-index { display: none; }
@@ -851,6 +1178,8 @@ html.lenis, html.lenis body { height: auto; }
 /* -------------------------------------------------------- reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  /* The component unmounts itself here too; this covers the pre-hydration paint. */
+  .intro { display: none; }
   .hero-sequence { height: 100vh; --progress: 1; }
   .portrait-wrap, .hero-title, .hero-detail { transition: none; }
   .ribbon-inner { width: 100%; }
