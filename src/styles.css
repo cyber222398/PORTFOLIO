@@ -634,6 +634,66 @@ html.is-scroll-locked body {
   color: var(--accent);
 }
 
+/* ---------------------------------------------------------------- skills */
+.skills {
+  position: relative;
+  padding: var(--section-y) var(--gutter);
+  background: #0b0b0b;
+  border-top: 1px solid var(--line);
+}
+.skills-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: clamp(40px, 6vw, 82px);
+}
+.skills-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.12em;
+  margin: 0;
+  font-size: clamp(58px, 10vw, 170px);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: var(--paper);
+}
+.skills-title-accent {
+  color: var(--accent);
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.skill-tile {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 18px;
+  align-items: start;
+  min-height: clamp(104px, 11vw, 156px);
+  padding: 18px;
+  background: var(--ink);
+  font: 400 11px/1.4 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--paper);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+.skill-tile:hover {
+  background: #17110e;
+  color: var(--accent);
+}
+.skill-index {
+  color: var(--accent);
+  font-size: 9px;
+}
+
 /* ----------------------------------------------------------------- work */
 .work {
   position: relative;
@@ -1046,10 +1106,12 @@ html.is-scroll-locked body {
   position: relative;
   overflow: hidden;
   padding: var(--section-y) var(--gutter) 34px;
-  background-image: url("/footer-bg-gr2.B2Xs9HmC.png");
-  background-position: top center;
+  background-image:
+    linear-gradient(180deg, rgba(5, 5, 5, 0.98) 0%, rgba(5, 5, 5, 0.72) 10%, transparent 28%),
+    url("/footer-bg-gr2.B2Xs9HmC.png");
+  background-position: top, top center;
   background-repeat: no-repeat;
-  background-size: 100% auto;
+  background-size: 100% 30%, 100% auto;
   background-color: #fff;
   isolation: isolate;
 }
@@ -1790,6 +1852,22 @@ html.is-scroll-locked body {
 
   .cap-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .skills-head {
+    display: block;
+  }
+  .skills-title {
+    margin-top: 28px;
+    font-size: clamp(58px, 19vw, 88px);
+  }
+  .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .skill-tile {
+    min-height: 94px;
+    padding: 14px;
+    gap: 10px;
+    font-size: 9px;
   }
   .cred-row {
     grid-template-columns: 1fr auto;

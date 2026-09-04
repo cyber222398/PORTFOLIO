@@ -6,6 +6,7 @@ import { SiteNav } from "../components/SiteNav";
 import { Hero } from "../components/Hero";
 import { Profile } from "../components/Profile";
 import { Ribbon } from "../components/Ribbon";
+import { Skills } from "../components/Skills";
 import { Work } from "../components/Work";
 import { Trajectory } from "../components/Trajectory";
 import { Contact } from "../components/Contact";
@@ -45,6 +46,7 @@ function Home() {
         <Hero />
         <Profile />
         <Ribbon />
+        <Skills />
         <Work />
         <Trajectory />
         <Contact />

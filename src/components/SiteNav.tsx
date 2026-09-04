@@ -4,6 +4,7 @@ import { profile } from "../content";
 const sections = [
   { label: "Index", href: "#top" },
   { label: "Profile", href: "#profile" },
+  { label: "Skills", href: "#skills" },
   { label: "Work", href: "#work" },
   { label: "Track", href: "#track" },
 ];
