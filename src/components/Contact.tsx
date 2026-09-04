@@ -19,14 +19,6 @@ export function Contact() {
       },
     );
 
-    gsap.from(el.querySelector(".contact-glow"), {
-      opacity: 0,
-      scale: 0.75,
-      duration: 1.4,
-      ease: "power2.out",
-      scrollTrigger: { trigger: el, start: "top 85%", once: true },
-    });
-
     // The figure rises into place, a touch slower than the copy beside it.
     gsap.fromTo(
       el.querySelector(".contact-figure"),
@@ -43,8 +35,6 @@ export function Contact() {
 
   return (
     <footer className="contact" id="contact" ref={scope} aria-label="Contact">
-      <div className="contact-glow" aria-hidden="true" />
-
       <img
         className="contact-figure"
         src="/footer-portrait.webp"

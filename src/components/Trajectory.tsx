@@ -1,66 +1,81 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { trajectory } from "../content";
-import { Reveal } from "./Reveal";
 import { useGsap } from "../lib/animation";
 
+/** Editorial education timeline using only the existing experience and project material. */
 export function Trajectory() {
   const scope = useRef<HTMLElement>(null);
 
   useGsap(({ scope: el }) => {
-    gsap.from(el.querySelectorAll(".track-word"), {
+    gsap.from(el.querySelectorAll(".education-word"), {
       yPercent: 110,
-      duration: 1.1,
+      opacity: 0,
+      duration: 1,
       ease: "expo.out",
-      stagger: 0.07,
+      stagger: 0.08,
       scrollTrigger: { trigger: el, start: "top 72%", once: true },
     });
-
-    // Each row's hairline draws left-to-right as it enters.
-    el.querySelectorAll<HTMLElement>(".track-row").forEach((row) => {
+    el.querySelectorAll<HTMLElement>(".education-row").forEach((row) => {
       gsap.from(row, {
         opacity: 0,
-        y: 30,
-        duration: 0.75,
+        y: 28,
+        duration: 0.65,
         ease: "power3.out",
-        scrollTrigger: { trigger: row, start: "top 90%", once: true },
-      });
-      gsap.from(row.querySelector(".track-rule"), {
-        scaleX: 0,
-        duration: 1.1,
-        ease: "expo.out",
-        scrollTrigger: { trigger: row, start: "top 90%", once: true },
+        scrollTrigger: { trigger: row, start: "top 88%", once: true },
       });
     });
   }, scope);
 
   return (
-    <section className="track" id="track" ref={scope} aria-label="Track record">
-      <div className="track-head">
-        <Reveal as="p" className="section-label">
-          (Track record)
-        </Reveal>
-        <h2 className="track-title">
-          <span className="track-word">Where</span> <span className="track-word">I</span>{" "}
-          <span className="track-word">have</span>{" "}
-          <span className="track-word track-word-accent">been</span>
+    <section className="education" id="track" ref={scope} aria-labelledby="education-title">
+      <aside className="education-aside">
+        <p className="education-kicker">
+          <i /> Education
+        </p>
+        <h2 id="education-title" className="education-title">
+          <span className="education-word">MY</span>
+          <span className="education-word">EDUCATION</span>
+          <span className="education-word is-accent">JOURNEY</span>
         </h2>
-      </div>
+        <p className="education-subtitle">FROM CURIOSITY TO ENGINEERING REAL SOLUTIONS.</p>
+        <p className="education-aside-note">
+          Electrical engineering
+          <br />
+          Embedded systems
+          <br />
+          Automation and beyond
+        </p>
+      </aside>
 
-      <ol className="track-list">
-        {trajectory.map((item) => (
-          <li className="track-row" key={item.index}>
-            <span className="track-rule" aria-hidden="true" />
-            <span className="track-index">{item.index}.</span>
-            <div className="track-main">
-              <h3 className="track-role">{item.title}</h3>
-              <p className="track-org">{item.org}</p>
-            </div>
-            <p className="track-period">{item.period}</p>
-            <p className="track-detail">{item.detail}</p>
-          </li>
-        ))}
-      </ol>
+      <div className="education-content">
+        <p className="education-status">
+          Learning <b>—</b> Building <b>—</b> Evolving
+        </p>
+        <ol className="education-list">
+          {trajectory.map((item, index) => (
+            <li className="education-row" key={item.index}>
+              <span className="education-number">{item.index}</span>
+              <div className="education-main">
+                <p className="education-period">{item.period}</p>
+                <h3>{item.title}</h3>
+                <p className="education-org">{item.org}</p>
+                <small>
+                  {index === 0
+                    ? "Research / conception / implementation"
+                    : index === 1
+                      ? "Discovery / learning / fieldwork"
+                      : index === 2
+                        ? "Foundation / projects / technical"
+                        : "Continuity / specialisation / ambition"}
+                </small>
+              </div>
+              <p className="education-detail">{item.detail}</p>
+            </li>
+          ))}
+        </ol>
+        <p className="education-caption">More than a diploma — a continuous progress</p>
+      </div>
     </section>
   );
 }
