@@ -31,6 +31,32 @@ export function Contact() {
         scrollTrigger: { trigger: el, start: "top 80%", once: true },
       },
     );
+
+    const exit = gsap.timeline({
+      scrollTrigger: {
+        trigger: el,
+        start: "bottom 92%",
+        end: "bottom top",
+        scrub: 0.8,
+      },
+    });
+
+    exit.to(
+      el.querySelectorAll(".contact-grid, .contact-address, .contact-base"),
+      { opacity: 0, yPercent: -12, ease: "none" },
+      0,
+    );
+    exit.to(
+      el.querySelector(".contact-figure"),
+      {
+        xPercent: -28,
+        yPercent: -8,
+        scale: 1.35,
+        filter: "blur(8px) contrast(1.06) saturate(0.95)",
+        ease: "none",
+      },
+      0,
+    );
   }, scope);
 
   return (

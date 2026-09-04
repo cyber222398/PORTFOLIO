@@ -293,7 +293,14 @@ html.is-scroll-locked body {
   height: min(92vh, 920px);
   left: 14.7vw;
   bottom: -5vh;
+  padding: 5px;
   overflow: hidden;
+  isolation: isolate;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, var(--accent), var(--paper), var(--ink), var(--accent));
+  background-size: 300% 300%;
+  animation: hero-portrait-glow 16s linear infinite;
+  box-shadow: 0 0 34px rgba(255, 88, 22, 0.38);
   opacity: min(clamp(0, calc((var(--progress) - 0.09) * 3.8), 1), calc(1 - var(--exit)));
   clip-path: inset(
     calc(48% - var(--progress) * 48%) calc(48% - var(--progress) * 48%)
@@ -314,6 +321,7 @@ html.is-scroll-locked body {
   object-fit: cover;
   object-position: 49% 45%;
   filter: brightness(calc(0.35 + var(--progress) * 0.72)) saturate(1.08) contrast(1.06);
+  border-radius: 0.72rem;
 }
 
 .hero-title {
@@ -902,8 +910,40 @@ html.is-scroll-locked body {
   position: relative;
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  border: 1px solid var(--line);
-  background: #0a0a0a;
+  padding: 2px;
+  border: 0;
+  border-radius: 10px;
+  isolation: isolate;
+  background: var(--ink);
+}
+.project-visual::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: -2px;
+  border-radius: 12px;
+  background: linear-gradient(
+    45deg,
+    var(--accent) 0%,
+    #ff9a5c 18%,
+    var(--paper) 34%,
+    var(--ink) 52%,
+    var(--accent) 72%,
+    #ff9a5c 86%,
+    var(--accent) 100%
+  );
+  background-size: 400% 400%;
+  animation: project-glow 18s linear infinite;
+  filter: drop-shadow(0 0 12px rgba(255, 88, 22, 0.55));
+}
+.project-photo,
+.plate-inner,
+.project-index-big {
+  position: relative;
+  z-index: 1;
+}
+.plate-inner {
+  position: absolute;
 }
 .plate-inner {
   position: absolute;
@@ -923,7 +963,7 @@ html.is-scroll-locked body {
   width: 100%;
   height: auto;
   /* Settled into the page; brought back up on hover. */
-  filter: saturate(0.88) contrast(1.03) brightness(0.84);
+  filter: saturate(0.98) contrast(1.08) brightness(0.84);
   transition: filter 0.45s ease;
 }
 .project-visual-photo:hover .project-photo {
@@ -933,6 +973,7 @@ html.is-scroll-locked body {
 .project-visual::after {
   content: "";
   position: absolute;
+  z-index: 2;
   inset: auto 0 0;
   height: 42%;
   pointer-events: none;
@@ -1756,6 +1797,28 @@ html.is-scroll-locked body {
     transform: perspective(1000px) translateY(-50%) rotateX(var(--rotate-x)) rotateY(1turn);
   }
 }
+@keyframes project-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes hero-portrait-glow {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 /* ----------------------------------------------------------- responsive */
 @media (max-width: 1040px) {
@@ -2133,6 +2196,12 @@ html.is-scroll-locked body {
     width: 100%;
   }
   .skills-carousel-inner {
+    animation: none;
+  }
+  .project-visual::before {
+    animation: none;
+  }
+  .portrait-wrap {
     animation: none;
   }
 }
