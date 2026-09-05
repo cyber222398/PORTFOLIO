@@ -1,7 +1,6 @@
 import { createFileRoute, HeadContent } from "@tanstack/react-router";
 import "../styles.css";
 import { useSmoothScroll } from "../lib/animation";
-import { Intro } from "../components/Intro";
 import { SiteNav } from "../components/SiteNav";
 import { Hero } from "../components/Hero";
 import { Profile } from "../components/Profile";
@@ -10,6 +9,7 @@ import { Skills } from "../components/Skills";
 import { Work } from "../components/Work";
 import { Trajectory } from "../components/Trajectory";
 import { Contact } from "../components/Contact";
+import { Intro } from "../components/Intro";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -37,10 +37,10 @@ function Home() {
   return (
     <>
       <HeadContent />
-      <Intro />
       <a className="skip-link" href="#profile">
         Skip to content
       </a>
+      <Intro />
       <SiteNav />
       <main>
         <Hero />

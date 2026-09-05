@@ -20,8 +20,6 @@ const SURNAME: Letter[] = [
   { char: "G", x: "5rem", y: "4.5rem", r: "32deg", d: "0.42s" },
 ];
 
-/** Must match the CSS: curtain delay (1.92s) + curtain duration (0.72s). */
-const SEQUENCE_MS = 2640;
 /** Length of the shortened exit used when the visitor skips ahead. */
 const SKIP_MS = 460;
 
@@ -79,21 +77,18 @@ export function Intro() {
       setScrollLocked(false);
     };
 
-    // Any deliberate input cuts the intro short.
+    // Scrolling is the deliberate cue that lifts the theatre curtain.
     const skip = () => {
       if (exitTimer) return;
       setSkipping(true);
       exitTimer = window.setTimeout(end, SKIP_MS);
     };
 
-    const events = ["pointerdown", "keydown", "wheel", "touchstart"] as const;
+    const events = ["wheel", "touchmove"] as const;
     events.forEach((type) => window.addEventListener(type, skip, { passive: true }));
-
-    const full = window.setTimeout(end, SEQUENCE_MS);
 
     return () => {
       events.forEach((type) => window.removeEventListener(type, skip));
-      window.clearTimeout(full);
       window.clearTimeout(exitTimer);
       setScrollLocked(false);
     };
@@ -139,7 +134,7 @@ export function Intro() {
         </span>
 
         <p className="intro-caption" aria-hidden="true">
-          Loading
+          Scroll to enter
           <span className="intro-dots">
             <i>.</i>
             <i>.</i>

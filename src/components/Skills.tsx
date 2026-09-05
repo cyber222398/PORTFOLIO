@@ -1,6 +1,6 @@
 import { useRef, type CSSProperties } from "react";
 import gsap from "gsap";
-import { Reveal } from "./Reveal";
+import { TypingTitle } from "./TypingTitle";
 import { useGsap } from "../lib/animation";
 
 const skillGroups = [
@@ -64,34 +64,36 @@ export function Skills() {
   return (
     <section className="skills" id="skills" ref={scope} aria-labelledby="skills-title">
       <div className="skills-head">
-        <Reveal as="p" className="section-label">
-          The stack behind the work
-        </Reveal>
-        <h2 id="skills-title" className="skills-title">
-          <span>SKILLS</span>
-          <span className="skills-title-accent">/</span>
-        </h2>
+        <TypingTitle
+          id="skills-title"
+          className="skills-title"
+          title="My Skills"
+          expression="V = I × R"
+          accentSuffix="Skills"
+        />
       </div>
 
-      <div className="skills-carousel" aria-label="Technology skills">
-        <div
-          className="skills-carousel-inner"
-          style={{ "--quantity": allSkills.length } as CSSProperties}
-        >
-          {allSkills.map(([name, icon], index) => (
-            <div
-              className="skills-carousel-card"
-              key={name}
-              style={{ "--index": index } as CSSProperties}
-              title={name}
-            >
-              <img src={`https://cdn.simpleicons.org/${icon}`} alt={name} width="48" height="48" />
-              <span className="skills-carousel-label">{name}</span>
-            </div>
-          ))}
+      <div
+        className="slider"
+        style={{ "--width": "120px", "--height": "120px", "--quantity": allSkills.length } as CSSProperties}
+        aria-label="Technology skills"
+      >
+        <div className="list">
+          {allSkills.map(([name, icon], index) => {
+            const whiteBadge = name === "GitHub" || name === "Vercel";
+            return (
+              <div className="item" key={name} style={{ "--position": index + 1 } as CSSProperties}>
+                <div className="card" title={name}>
+                  <div className={whiteBadge ? "card-icon card-icon-white" : "card-icon"}>
+                    <img src={`https://cdn.simpleicons.org/${icon}`} alt={name} width="34" height="34" />
+                  </div>
+                  <span>{name}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-
     </section>
   );
 }

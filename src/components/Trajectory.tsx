@@ -2,13 +2,18 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { trajectory } from "../content";
 import { useGsap } from "../lib/animation";
+import { TypingTitle } from "./TypingTitle";
+import agmLogo from "../../logos/AGM LOGO.png";
+import estLogo from "../../logos/EST LOGO.png";
+
+const educationLogos = [agmLogo, agmLogo, estLogo];
 
 /** Editorial education timeline using only the existing experience and project material. */
 export function Trajectory() {
   const scope = useRef<HTMLElement>(null);
 
   useGsap(({ scope: el }) => {
-    gsap.from(el.querySelectorAll(".education-word"), {
+    gsap.from(el.querySelectorAll(".typing-title-value"), {
       yPercent: 110,
       opacity: 0,
       duration: 1,
@@ -24,57 +29,60 @@ export function Trajectory() {
         ease: "power3.out",
         scrollTrigger: { trigger: row, start: "top 88%", once: true },
       });
+
+      const node = row.querySelector<HTMLElement>(".education-number");
+      if (node) {
+        gsap.fromTo(
+          node,
+          { boxShadow: "0 0 0 5px rgba(255, 88, 22, 0.04), 0 0 8px rgba(255, 88, 22, 0.12)" },
+          {
+            boxShadow: "0 0 0 7px rgba(255, 88, 22, 0.1), 0 0 24px rgba(255, 88, 22, 0.5)",
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: { trigger: row, start: "top 82%", once: true },
+          },
+        );
+      }
     });
   }, scope);
 
   return (
     <section className="education" id="track" ref={scope} aria-labelledby="education-title">
-      <aside className="education-aside">
-        <p className="education-kicker">
-          <i /> Education
-        </p>
-        <h2 id="education-title" className="education-title">
-          <span className="education-word">MY</span>
-          <span className="education-word">EDUCATION</span>
-          <span className="education-word is-accent">JOURNEY</span>
-        </h2>
-        <p className="education-subtitle">FROM CURIOSITY TO ENGINEERING REAL SOLUTIONS.</p>
-        <p className="education-aside-note">
-          Electrical engineering
-          <br />
-          Embedded systems
-          <br />
-          Automation and beyond
-        </p>
-      </aside>
+      <div className="education-head">
+        <TypingTitle
+          id="education-title"
+          className="education-title"
+          title={"My Education\nJourney"}
+          expression="Q = U × I × sinφ"
+          accentLines={[1]}
+        />
+      </div>
 
-      <div className="education-content">
-        <p className="education-status">
-          Learning <b>—</b> Building <b>—</b> Evolving
-        </p>
-        <ol className="education-list">
-          {trajectory.map((item, index) => (
+      <div className="education-layout">
+        <div className="education-content">
+          <ol className="education-list">
+          {trajectory.map((item) => (
             <li className="education-row" key={item.index}>
               <span className="education-number">{item.index}</span>
-              <div className="education-main">
-                <p className="education-period">{item.period}</p>
-                <h3>{item.title}</h3>
-                <p className="education-org">{item.org}</p>
-                <small>
-                  {index === 0
-                    ? "Research / conception / implementation"
-                    : index === 1
-                      ? "Discovery / learning / fieldwork"
-                      : index === 2
-                        ? "Foundation / projects / technical"
-                        : "Continuity / specialisation / ambition"}
-                </small>
+              <div className="education-card">
+                <div className="education-main">
+                  <p className="education-period">{item.period}</p>
+                  <h3>{item.title}</h3>
+                  <p className="education-org">{item.org}</p>
+                </div>
+                <span
+                  className="education-logo"
+                  aria-label={educationLogos[Number(item.index) - 1] ? `${item.org} logo` : undefined}
+                >
+                  {educationLogos[Number(item.index) - 1] && (
+                    <img src={educationLogos[Number(item.index) - 1]} alt="" />
+                  )}
+                </span>
               </div>
-              <p className="education-detail">{item.detail}</p>
             </li>
           ))}
-        </ol>
-        <p className="education-caption">More than a diploma — a continuous progress</p>
+          </ol>
+        </div>
       </div>
     </section>
   );

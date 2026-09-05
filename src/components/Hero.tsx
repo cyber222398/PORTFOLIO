@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { profile } from "../content";
+import { TypingTitle } from "./TypingTitle";
 
 /**
  * Opening scene. Scroll drives a single `--progress` custom property and the whole
@@ -48,10 +49,13 @@ export function Hero() {
           <img className="portrait" src="/hero-portrait.webp" alt="" width="1600" height="900" />
         </div>
 
-        <h1 className="hero-title">
-          <span className="title-line title-student">Student</span>
-          <span className="title-line title-developer">Developer</span>
-        </h1>
+        <TypingTitle
+          as="h1"
+          className="hero-title"
+          title={"Student\nDeveloper"}
+          expression="P = U × I × cosφ"
+          accentLines={[1]}
+        />
 
         <div className="hero-connector" aria-hidden="true">
           <span className="connector-node" />

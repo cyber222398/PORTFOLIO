@@ -37,9 +37,10 @@ export function Profile() {
           </Reveal>
 
           <div className="cap-grid">
-            {capabilities.map((cap) => (
+            {capabilities.map((cap, index) => (
               <span className="cap-tile" key={cap}>
-                {cap}
+                <span className="cap-index">{String(index + 1).padStart(2, "0")}</span>
+                <span>{cap}</span>
               </span>
             ))}
           </div>

@@ -76,14 +76,35 @@ export function Contact() {
           <p className="section-label">Reach me</p>
           <ul>
             <li>
-              <a href={`mailto:${profile.email}`}>Email</a>
+              <a className="contact-social-button email-button" href={`mailto:${profile.email}`}>
+                <img src="https://cdn.simpleicons.org/gmail/ffffff" alt="" aria-hidden="true" />
+                <span>Email</span>
+              </a>
             </li>
             <li>
-              <a href={`tel:${profile.phone.replace(/\s/g, "")}`}>Phone</a>
+              <a
+                className="contact-social-button whatsapp-button"
+                href={`https://wa.me/${profile.phone.replace(/\s/g, "").replace(/^\+/, "")}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <img src="https://cdn.simpleicons.org/whatsapp/ffffff" alt="" aria-hidden="true" />
+                <span>Phone</span>
+              </a>
             </li>
             <li>
-              <a href={profile.github} target="_blank" rel="noreferrer">
-                GitHub
+              <a
+                className="linkedin-button"
+                href={profile.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Open Ayoub Aznag's LinkedIn profile"
+              >
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                  <path d="M92.86,0H7.12A7.17,7.17,0,0,0,0,7.21V92.79A7.17,7.17,0,0,0,7.12,100H92.86A7.19,7.19,0,0,0,100,92.79V7.21A7.19,7.19,0,0,0,92.86,0ZM30.22,85.71H15.4V38H30.25V85.71ZM22.81,31.47a8.59,8.59,0,1,1,8.6-8.59A8.6,8.6,0,0,1,22.81,31.47Zm63,54.24H71V62.5c0-5.54-.11-12.66-7.7-12.66s-8.91,6-8.91,12.26V85.71H39.53V38H53.75v6.52H54c2-3.75,6.83-7.7,14-7.7,15,0,17.79,9.89,17.79,22.74Z" />
+                </svg>
+                <span>LinkedIn</span>
+                <span className="linkedin-tooltip">See my profile!</span>
               </a>
             </li>
           </ul>
